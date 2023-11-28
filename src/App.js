@@ -1,45 +1,60 @@
-// Frontend code 
-// Filename - App.js
-// Filename - App.js
+import React, { useState } from "react";
+import data from "./data";
+import Movies from "./components/Movie";
 
-import { useState } from 'react'
-function App() {
-	const [name, setName] = useState("");
-	const [email, setEmail] = useState("");
+const App = () => {
+  const [movies, setMovies] = useState(data);
 
-  
-	const handleOnSubmit = async (e) => {
-		e.preventDefault();
-		let result = await fetch(
-		'http://localhost:5000/register', {
-			method: "post",
-			body: JSON.stringify({ name, email }),
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		})
-		result = await result.json();
-		console.warn(result);
-		if (result) {
-			alert("Data saved succesfully");
-			setEmail("");
-			setName("");
-		}
-	}
-	return (
-		<>
-			<h1>This is React WebApp </h1>
-			<form action="">
-				<input type="text" placeholder="name"
-				value={name} onChange={(e) => setName(e.target.value)} />
-				<input type="email" placeholder="email"
-				value={email} onChange={(e) => setEmail(e.target.value)} />
-				<button type="submit"
-				onClick={handleOnSubmit}>submit</button>
-			</form>
+  function removeMovie(Year){
+	const newMovies = movies.filter((movie) => movie.Year !== Year);
+	setMovies(newMovies);
+  }
 
-		</>
-	);
+  function readMoreHandler(){
+	setMovies(data);
+  }
+
+  if(movies.length === 0){
+	return(
+		<div>
+			<button onClick={readMoreHandler}>
+				refresh
+			</button>
+		</div>
+	)
+  }
+
+  return (
+    <div className="App">
+      <h1>Movie List</h1>
+	  <Movies
+		movies={movies} 
+		removeMovie={removeMovie} />
+    </div>
+  );
 }
 
 export default App;
+
+
+// import React, { useState } from "react";
+// import data from "./data"; // Make sure the path is correct
+// import Movies from "./components/Movie";
+
+// const App = () => {
+//   const [movies, setMovies] = useState(data);
+
+//   function removeMovie(Year) {
+//     const newMovies = movies.filter((movie) => movie.Year !== Year);
+//     setMovies(newMovies);
+//   }
+
+//   return (
+//     <div className="App">
+//       <h1>Movie List</h1>
+//       <Movies movies={movies} removeMovie={removeMovie} />
+//     </div>
+//   );
+// }
+
+// export default App;
