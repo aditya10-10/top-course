@@ -1,33 +1,51 @@
-import React, { useState } from "react";
+import Card from "./Card";
+import React, { useState } from 'react'
 
-function Cards({ Poster, Title, Year, imdbID, Plot, removeMovie }) {
-  const [readMore, setReadMore] = useState(false);
+const Cards = (props) => {
+    console.log(props.category);
+    console.log(props.courses);
 
-  const description = readMore ? Plot : `${Plot.substring(0, 100)} .....`;
+    let category = props.category;
+    const [likedCourses, setLikedCourses] = useState([]);
+    //   let allCourse = [];
 
-  function readMoreHandler() {
-    setReadMore(!readMore);
-  }
+    // It Returns list of all courses received from the api Response
 
-  return (
-    <div>
-      <img src={Poster} alt={Title}></img>
-      <h1>Viewer</h1>
-      <h1>{Title}</h1>
-      <h3>{Year}</h3>
-      {/* <h1>{imdbID}</h1> */}
+    // const getCourses = () => {
+    //     Object.values(props.courses).forEach((courseCategory) => {
+    //         courseCategory.forEach((course) => {
+    //             allCourse.push(course);
+    //         });
+    //     });
+    //     return allCourse;
+    // };
 
-      <div>
-        <h1>Description</h1>
-        <p>{readMore ? Plot : description}</p>
-        <span onClick={readMoreHandler}>
-          {readMore ? "show less" : "show more"}
-        </span>
-      </div>
+    function getCourses() {
+        if (category === "All") {
+            let allCourses = [];
+            Object.values(props.courses).forEach((array) => {
+                array.forEach((courseData) => {
+                    allCourses.push(courseData);
+                });
+            });
+            return allCourses;
+        }
+        else
+        {
+            return props.courses[category];
+        }
+    }
 
-      <button onClick={() => removeMovie(Year)}>No Internet</button>
-    </div>
-  );
-}
+    //   console.log(allCourse);
+    return (
+        <div className="flex flex-wrap justify-center gap-4 mb-4">
+            {
+                getCourses()?.map((course) => {
+                    return <Card course={course} key={props.courses.id} likedCourses={likedCourses} setLikedCourses={setLikedCourses} />;
+                })
+            }
+        </div>
+    );
+};
 
 export default Cards;
